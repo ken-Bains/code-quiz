@@ -16,6 +16,7 @@ questionIndex = 0;
 correctAnswers = 0;
 timerTotal = 90;
 timeElapsed = 0;
+var time;
 
 
 startBtn.addEventListener("click", function (event) {
@@ -87,6 +88,7 @@ function checkAnswer(event) {
         console.log(correctAnswers, "checkanswer");
     } else {
         key = "wrong";
+        timeElapsed = timeElapsed + 5;
     }
     // var fadeTarget = document.getElementById("answerCheckDiv");
     // console.log(fadeTarget.style.opacity);
@@ -104,7 +106,7 @@ function checkAnswer(event) {
     //     }
     // }, 200);
 
-    listItem.innerHTML = "<hr> <span>You got it " + key + "!!</span>";
+    listItem.innerHTML = "<hr> <span>You got it " + key + "!! -5 seconds</span>";
     document.getElementById("answerCheckDiv").appendChild(listItem);
     return
 };
@@ -113,6 +115,7 @@ function displayScore() {
     document.getElementById("questionsWrapper").classList.add("hideClass");
     document.getElementById("scoreWrapper").classList.remove("hideClass");
     document.getElementById("answerId").innerHTML = " " + correctAnswers + " ";
+    clearInterval(time);
 
 }
 
@@ -143,15 +146,20 @@ function storeScores() {
     return
 }
 function startTimer() {
-    var time = setInterval(function () {
+    time = setInterval(function () {
         var totalSecondsLeft = timerTotal - timeElapsed;
         var minutesLeft = Math.floor(totalSecondsLeft / 60);
         var secondsLeft = totalSecondsLeft % 60;
         var formattedSeconds;
         var formattedMinutes;
 
+        if (timeElapsed > timerTotal) {
+            clearInterval(time);
+            timerSpan.innerHTML = "No more time left!"
+            displayScore();
+            return
+        }
         timeElapsed++;
-
         if (secondsLeft < 10) {
             formattedSeconds = "0" + secondsLeft;
         } else {
@@ -164,6 +172,6 @@ function startTimer() {
             formattedMinutes = minutesLeft;
         }
 
-        timerSpan.innerHTML = formattedMinutes + " : " + formattedSeconds;
+        timerSpan.innerHTML = formattedMinutes + ":" + formattedSeconds;
     }, 1000)
 }
