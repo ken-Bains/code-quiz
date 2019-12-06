@@ -14,29 +14,69 @@
 </head>
 
 <body>
-    <h1>code qiuz</h1>
+    <header class="navbar-light bg-light mb-4 border-bottom">
+        <div class="row">
+            <div class="col-sm-6 justify-content-left">
+                <button type="button" class="btn btn-link ml-5" id="viewHighscoreBtn">View Highscores</button>
+            </div>
+            <div class="col-sm-6 text-right">
+               <p>Time Left: <span class="mr-5" id="timerSpan">1:30</span></p> 
+            </div>
+        </div>
+    </header>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-sm-3">
                 <button type="button" class="btn btn-primary btn-block startBtn">Start</button>
             </div>
         </div>
-        <div  class="row justify-content-center">
-                <div class="col-sm-4" id="questionDiv">
-                </div>
-        </div>
-        <div class="row justify-content-center buttonQuestions hideClass">
-            <div class="col-sm-3">
 
-                <!-- <button type="button" class="btn btn-primary btn-block" id="0"></button>
-                <button type="button" class="btn btn-primary btn-block" id="1"></button>
-                <button type="button" class="btn btn-primary btn-block" id="2"></button>
-                <button type="button" class="btn btn-primary btn-block" id="3"></button> -->
+
+        <div id="questionsWrapper">
+            <div class="row justify-content-center">
+                <div class="col-sm-4" id="questionDiv"></div>
+            </div>
+            <div class="row justify-content-center buttonQuestions hideClass">
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-3" id="answerCheckDiv"></div>
             </div>
         </div>
-        <div  class="row justify-content-center">
-                <div class="col-sm-3" id="answerCheckDiv">
+
+        <div id="scoreWrapper" class="hideClass">
+            <div class="row justify-content-center">
+                <div class="col-sm-4">
+                    <h4>All DONE!!</h4>
+                    <h5>You have answered<span id="answerId"></span>correctly.</h5>
+                    <div>
+                        <form class="form-inline">
+                            <div class="form-group mb-2">
+                                <label for="inputPassword2" class="sr-only">Please Enter you initials.</label>
+                                <input type="text" class="form-control" id="intialsInput" placeholder="Initials">
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2 ml-2" id="addInitialsId">Add
+                                Initials</button>
+                        </form>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="highScoreWrapper" class="hideClass">
+            <div class="row justify-content-center">
+                <div class="col-sm-3 listOfScores">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-3">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary mr-3" id="goBackBtn">Go Back</button>
+                        <button type="button" class="btn btn-secondary" id="clearBtn">Clear Highscores</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
