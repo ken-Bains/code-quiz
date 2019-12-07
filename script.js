@@ -56,8 +56,19 @@ clearBtn.addEventListener("click", function (e) {
 });
 
 viewHighscoreBtn.addEventListener("click", function (e) {
-    startBtn.classList.add("hideClass")
-    viewHighScores();
+    // if(timeElapsed > 0) {
+        // var confirms = confirm("Are you sure you want to leave the quiz? You answers will not be saved and will have to start over");
+    //     if (confirms === true) {
+    //         startBtn.classList.add("hideClass")
+    //         viewHighScores();
+    //     } else {
+    //         return
+    //     }
+    // } else {
+        startBtn.classList.add("hideClass")
+        viewHighScores();
+    // }
+    
 });
 
 function createBtns(event) {
@@ -122,19 +133,29 @@ function displayScore() {
 function viewHighScores() {
     scoreWrapper.classList.add("hideClass");
     highScoresDiv.classList.remove("hideClass");
-    highScores = JSON.parse(localStorage.getItem("scores"));
+    document.getElementById("questionsWrapper").classList.add("hideClass");
+    clearInterval(time);
+    timerSpan.innerHTML = "00:00"
+    console.log(highScores);
+    // if(highScores.length !== JSON.parse(localStorage.getItem("scores")).length){
 
-    for (var i = 0; i < highScores.length; i++) {
-        var item = document.createElement("p");
-        item.innerHTML = highScores[i].name + " " + highScores[i].score;
-        highScoreItemsDiv.appendChild(item);
-    }
+        highScores = JSON.parse(localStorage.getItem("scores"));
+        if (localStorage.getItem("scores") !== null) {
+            for (var i = 0; i < highScores.length; i++) {
+                var item = document.createElement("p");
+                item.innerHTML = highScores[i].name + " - " + highScores[i].score + " points";
+                highScoreItemsDiv.appendChild(item);
+            }
+        }
+    // }
+
 }
 
 function storeScores() {
     var intialsInput = document.getElementById("intialsInput").value;
     var scores;
-    var temp = { "name": intialsInput, "score": correctAnswers };
+    var calculatedScore = Math.max(0, timerTotal - timeElapsed) * correctAnswers;
+    var temp = { "name": intialsInput, "score": calculatedScore };
 
     if (localStorage.getItem("scores") !== null) {
         highScores = JSON.parse(localStorage.getItem("scores"));
@@ -143,6 +164,7 @@ function storeScores() {
 
     scores = JSON.stringify(highScores);
     localStorage.setItem("scores", scores);
+    //highScores = [];
     return
 }
 function startTimer() {
