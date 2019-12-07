@@ -9,6 +9,7 @@ goBackBtn = document.getElementById("goBackBtn");
 clearBtn = document.getElementById("clearBtn");
 viewHighscoreBtn = document.getElementById("viewHighscoreBtn");
 timerSpan = document.getElementById("timerSpan");
+answerCheckDiv = document.getElementById("answerCheckDiv")
 highScoreItemsDiv = document.querySelector(".listOfScores");
 
 var highScores = [];
@@ -18,6 +19,8 @@ timerTotal = 90;
 timeElapsed = 0;
 var time;
 
+
+//-------------------------------------------------------------all event listeners
 
 startBtn.addEventListener("click", function (event) {
     event.preventDefault()
@@ -56,20 +59,13 @@ clearBtn.addEventListener("click", function (e) {
 });
 
 viewHighscoreBtn.addEventListener("click", function (e) {
-    // if(timeElapsed > 0) {
-        // var confirms = confirm("Are you sure you want to leave the quiz? You answers will not be saved and will have to start over");
-    //     if (confirms === true) {
-    //         startBtn.classList.add("hideClass")
-    //         viewHighScores();
-    //     } else {
-    //         return
-    //     }
-    // } else {
-        startBtn.classList.add("hideClass")
-        viewHighScores();
-    // }
-    
+    startBtn.classList.add("hideClass")
+    viewHighScores();
 });
+
+
+
+//--------------------------------------------------------button functionality
 
 function createBtns(event) {
     questionBtns.innerHTML = "";
@@ -78,7 +74,6 @@ function createBtns(event) {
     questionDiv.innerHTML = "<h5>" + questions[questionIndex].title + "</h5>";
 
     for (var i = 0; i < questions[questionIndex].choices.length; i++) {
-        // var listItem = "";
         var listItem = document.createElement('span');
         listItem.innerHTML = "<button type='button' class='btn btn-primary btn-block mb-2' >" + questions[questionIndex].choices[i] + "</button>";
         questionBtns.appendChild(listItem);
@@ -88,40 +83,43 @@ function createBtns(event) {
 };
 
 function checkAnswer(event) {
-    document.getElementById("answerCheckDiv").innerHTML = "";
+    answerCheckDiv.innerHTML = "";
+    
     var listItem = "";
     var listItem = document.createElement('div');
     var key;
 
     if (event.target.innerHTML === questions[questionIndex - 1].answer) {
-        key = "right";
+        key = "right :)";
         correctAnswers++;
         console.log(correctAnswers, "checkanswer");
     } else {
-        key = "wrong";
+        key = "wrong!! -5 seconds";
         timeElapsed = timeElapsed + 5;
     }
-    // var fadeTarget = document.getElementById("answerCheckDiv");
-    // console.log(fadeTarget.style.opacity);
 
-    // var fadeEffect = setInterval(function () {      
-    //     document.getElementById("answerCheckDiv").innerHTML = "";
-    //     if (!fadeTarget.style.opacity || fadeTarget.style.opacity == 0) {
-    //         fadeTarget.style.opacity = 1;
-    //     }
-    //     if (fadeTarget.style.opacity > 0) {
-    //         fadeTarget.style.opacity -= 0.1;
-    //     } else {
-    //         clearInterval(fadeEffect);
-    //         return
-    //     }
-    // }, 200);
+    answerCheckDiv.style.display = "block";
+    var op = 1;
+    var timerFade = setInterval(function(){
+        if(op <= 0.1){
+            clearInterval(timerFade);
+            answerCheckDiv.style.display = "none";
+        }
+        answerCheckDiv.style.opacity = op;
+        answerCheckDiv.style.filter = "alpha(opacity=" + op * 100 + ")";
+        op-= op * 0.1;
+    }, 50);
 
-    listItem.innerHTML = "<hr> <span>You got it " + key + "!! -5 seconds</span>";
-    document.getElementById("answerCheckDiv").appendChild(listItem);
+
+    listItem.innerHTML = "<hr> <span>You got it " + key + "</span>";
+    answerCheckDiv.appendChild(listItem);
     return
 };
 
+
+
+
+// ---------------------------------------------------- creating scores functions
 function displayScore() {
     document.getElementById("questionsWrapper").classList.add("hideClass");
     document.getElementById("scoreWrapper").classList.remove("hideClass");
@@ -136,18 +134,17 @@ function viewHighScores() {
     document.getElementById("questionsWrapper").classList.add("hideClass");
     clearInterval(time);
     timerSpan.innerHTML = "00:00"
-    console.log(highScores);
-    // if(highScores.length !== JSON.parse(localStorage.getItem("scores")).length){
+    highScoreItemsDiv.innerHTML = "";
 
-        highScores = JSON.parse(localStorage.getItem("scores"));
-        if (localStorage.getItem("scores") !== null) {
-            for (var i = 0; i < highScores.length; i++) {
-                var item = document.createElement("p");
-                item.innerHTML = highScores[i].name + " - " + highScores[i].score + " points";
-                highScoreItemsDiv.appendChild(item);
-            }
+    highScores = JSON.parse(localStorage.getItem("scores"));
+    if (localStorage.getItem("scores") !== null) {
+        for (var i = 0; i < highScores.length; i++) {
+            var item = document.createElement("p");
+            item.innerHTML = highScores[i].name + " - " + highScores[i].score + " points";
+            highScoreItemsDiv.appendChild(item);
         }
-    // }
+    }
+
 
 }
 
@@ -167,6 +164,9 @@ function storeScores() {
     //highScores = [];
     return
 }
+
+
+//-------------------------------------------------------------timer functions
 function startTimer() {
     time = setInterval(function () {
         var totalSecondsLeft = timerTotal - timeElapsed;
